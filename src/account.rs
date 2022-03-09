@@ -3,6 +3,7 @@ use crate::model::*;
 use crate::client::*;
 use crate::errors::*;
 use std::collections::BTreeMap;
+use std::fmt;
 use crate::api::API;
 use crate::api::Spot;
 
@@ -49,17 +50,19 @@ impl From<OrderType> for String {
     }
 }
 
+#[derive(Debug, Copy, Clone)]
 pub enum OrderSide {
     Buy,
     Sell,
 }
 
-impl From<OrderSide> for String {
-    fn from(item: OrderSide) -> Self {
-        match item {
-            OrderSide::Buy => String::from("BUY"),
-            OrderSide::Sell => String::from("SELL"),
-        }
+impl fmt::Display for OrderSide {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        let desc = match self {
+            Self::Buy => "BUY",
+            Self::Sell => "SELL",
+        };
+        write!(f, "{}", desc)
     }
 }
 
@@ -719,7 +722,7 @@ impl Account {
         let mut order_parameters: BTreeMap<String, String> = BTreeMap::new();
 
         order_parameters.insert("symbol".into(), order.symbol);
-        order_parameters.insert("side".into(), order.order_side.into());
+        order_parameters.insert("side".into(), order.order_side.to_string());
         order_parameters.insert("type".into(), order.order_type.into());
         order_parameters.insert("quantity".into(), order.qty.to_string());
 
@@ -745,7 +748,7 @@ impl Account {
         let mut order_parameters: BTreeMap<String, String> = BTreeMap::new();
 
         order_parameters.insert("symbol".into(), order.symbol);
-        order_parameters.insert("side".into(), order.order_side.into());
+        order_parameters.insert("side".into(), order.order_side.to_string());
         order_parameters.insert("type".into(), order.order_type.into());
         order_parameters.insert("quoteOrderQty".into(), order.quote_order_qty.to_string());
 

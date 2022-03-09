@@ -327,7 +327,7 @@ impl FuturesAccount {
     fn build_order(&self, order: OrderRequest) -> BTreeMap<String, String> {
         let mut parameters = BTreeMap::new();
         parameters.insert("symbol".into(), order.symbol);
-        parameters.insert("side".into(), order.side.into());
+        parameters.insert("side".into(), order.side.to_string());
         parameters.insert("type".into(), order.order_type.into());
 
         if let Some(position_side) = order.position_side {
