@@ -441,4 +441,35 @@ impl FuturesAccount {
         self.client
             .get_signed(API::Futures(Futures::OpenOrders), Some(request))
     }
+
+    pub fn get_all_orders<S1, S2, S3, S4, S5>(
+        &self, symbol: S1, from_id: S2, start_time: S3, end_time: S4, limit: S5,
+    ) -> Result<Vec<crate::futures::model::Order>>
+        where
+            S1: Into<String>,
+            S2: Into<Option<u64>>,
+            S3: Into<Option<u64>>,
+            S4: Into<Option<u64>>,
+            S5: Into<Option<u16>>,
+    {
+        let mut parameters: BTreeMap<String, String> = BTreeMap::new();
+        parameters.insert("symbol".into(), symbol.into());
+
+        if let Some(order_id) = from_id.into() {
+            parameters.insert("orderId".into(), order_id.to_string());
+        }
+        if let Some(start_time) = start_time.into() {
+            parameters.insert("startTime".into(), start_time.to_string());
+        }
+        if let Some(end_time) = end_time.into() {
+            parameters.insert("endTime".into(), end_time.to_string());
+        }
+        if let Some(limit) = limit.into() {
+            parameters.insert("limit".into(), limit.to_string());
+        }
+
+        let request = build_signed_request(parameters, self.recv_window)?;
+        self.client
+            .get_signed(API::Futures(Futures::AllOrders), Some(request))
+    }
 }
