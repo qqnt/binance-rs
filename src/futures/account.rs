@@ -1,4 +1,5 @@
 use std::collections::BTreeMap;
+use std::fmt;
 
 use crate::util::*;
 use crate::errors::*;
@@ -14,6 +15,7 @@ pub struct FuturesAccount {
     pub recv_window: u64,
 }
 
+#[derive(Debug, Copy, Clone)]
 pub enum ContractType {
     Perpetual,
     CurrentMonth,
@@ -22,34 +24,39 @@ pub enum ContractType {
     NextQuarter,
 }
 
-impl From<ContractType> for String {
-    fn from(item: ContractType) -> Self {
-        match item {
-            ContractType::Perpetual => String::from("PERPETUAL"),
-            ContractType::CurrentMonth => String::from("CURRENT_MONTH"),
-            ContractType::NextMonth => String::from("NEXT_MONTH"),
-            ContractType::CurrentQuarter => String::from("CURRENT_QUARTER"),
-            ContractType::NextQuarter => String::from("NEXT_QUARTER"),
-        }
+impl fmt::Display for ContractType {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        let s = match self {
+            ContractType::Perpetual => "PERPETUAL",
+            ContractType::CurrentMonth => "CURRENT_MONTH",
+            ContractType::NextMonth =>"NEXT_MONTH",
+            ContractType::CurrentQuarter => "CURRENT_QUARTER",
+            ContractType::NextQuarter => "NEXT_QUARTER",
+        };
+        write!(f, "{}", s)
     }
 }
 
+#[derive(Debug, Copy, Clone)]
 pub enum PositionSide {
     Both,
     Long,
     Short,
 }
 
-impl From<PositionSide> for String {
-    fn from(item: PositionSide) -> Self {
-        match item {
-            PositionSide::Both => String::from("BOTH"),
-            PositionSide::Long => String::from("LONG"),
-            PositionSide::Short => String::from("SHORT"),
-        }
+
+impl fmt::Display for PositionSide {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        let s = match self {
+            PositionSide::Both => "BOTH",
+            PositionSide::Long => "LONG",
+            PositionSide::Short => "SHORT",
+        };
+        write!(f, "{}", s)
     }
 }
 
+#[derive(Debug, Copy, Clone)]
 pub enum OrderType {
     Limit,
     Market,
@@ -60,31 +67,37 @@ pub enum OrderType {
     TrailingStopMarket,
 }
 
-impl From<OrderType> for String {
-    fn from(item: OrderType) -> Self {
-        match item {
-            OrderType::Limit => String::from("LIMIT"),
-            OrderType::Market => String::from("MARKET"),
-            OrderType::Stop => String::from("STOP"),
-            OrderType::StopMarket => String::from("STOP_MARKET"),
-            OrderType::TakeProfit => String::from("TAKE_PROFIT"),
-            OrderType::TakeProfitMarket => String::from("TAKE_PROFIT_MARKET"),
-            OrderType::TrailingStopMarket => String::from("TRAILING_STOP_MARKET"),
-        }
+
+impl fmt::Display for OrderType {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        let s = match self {
+            OrderType::Limit =>  "LIMIT",
+            OrderType::Market => "MARKET",
+            OrderType::Stop => "STOP",
+            OrderType::StopMarket => "STOP_MARKET",
+            OrderType::TakeProfit => "TAKE_PROFIT",
+            OrderType::TakeProfitMarket => "TAKE_PROFIT_MARKET",
+            OrderType::TrailingStopMarket => "TRAILING_STOP_MARKET",
+        };
+        write!(f, "{}", s)
     }
 }
 
+
+#[derive(Debug, Copy, Clone)]
 pub enum WorkingType {
     MarkPrice,
     ContractPrice,
 }
 
-impl From<WorkingType> for String {
-    fn from(item: WorkingType) -> Self {
-        match item {
-            WorkingType::MarkPrice => String::from("MARK_PRICE"),
-            WorkingType::ContractPrice => String::from("CONTRACT_PRICE"),
-        }
+
+impl fmt::Display for WorkingType {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        let s = match self {
+            WorkingType::MarkPrice => "MARK_PRICE",
+            WorkingType::ContractPrice => "CONTRACT_PRICE",
+        };
+        write!(f, "{}", s)
     }
 }
 
@@ -341,10 +354,10 @@ impl FuturesAccount {
         let mut parameters = BTreeMap::new();
         parameters.insert("symbol".into(), order.symbol);
         parameters.insert("side".into(), order.side.to_string());
-        parameters.insert("type".into(), order.order_type.into());
+        parameters.insert("type".into(), order.order_type.to_string());
 
         if let Some(position_side) = order.position_side {
-            parameters.insert("positionSide".into(), position_side.into());
+            parameters.insert("positionSide".into(), position_side.to_string());
         }
         if let Some(time_in_force) = order.time_in_force {
             parameters.insert("timeInForce".into(), time_in_force.into());
@@ -374,7 +387,7 @@ impl FuturesAccount {
             parameters.insert("callbackRate".into(), callback_rate.to_string());
         }
         if let Some(working_type) = order.working_type {
-            parameters.insert("workingType".into(), working_type.into());
+            parameters.insert("workingType".into(), working_type.to_string());
         }
         if let Some(price_protect) = order.price_protect {
             parameters.insert(
