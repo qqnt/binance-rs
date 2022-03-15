@@ -243,6 +243,20 @@ impl FuturesMarket {
         self.client.get(API::Futures(Futures::PremiumIndex), None)
     }
 
+    // Mark price for ONE symbol.
+    pub fn get_mark_price<S>(&self, symbol: S) -> Result<MarkPrice>
+        where
+            S: Into<String>,
+    {
+        let mut parameters: BTreeMap<String, String> = BTreeMap::new();
+
+        parameters.insert("symbol".into(), symbol.into());
+        let request = build_request(parameters);
+
+        self.client
+            .get(API::Futures(Futures::PremiumIndex), Some(request))
+    }
+
     pub fn get_all_liquidation_orders(&self) -> Result<LiquidationOrders> {
         self.client.get(API::Futures(Futures::AllForceOrders), None)
     }
