@@ -1,5 +1,6 @@
 use std::collections::BTreeMap;
 use std::fmt;
+use std::str::FromStr;
 
 use crate::util::*;
 use crate::errors::*;
@@ -80,6 +81,23 @@ impl fmt::Display for OrderType {
             OrderType::TrailingStopMarket => "TRAILING_STOP_MARKET",
         };
         write!(f, "{}", s)
+    }
+}
+
+impl FromStr for OrderType {
+    type Err = String;
+
+    fn from_str(s: &str) -> std::result::Result<Self, Self::Err> {
+        match s {
+            "LIMIT" => Ok(Self::Limit),
+            "MARKET" => Ok(Self::Market),
+            "STOP" => Ok(Self::Stop),
+            "STOP_MARKET" => Ok(Self::StopMarket),
+            "TAKE_PROFIT" => Ok(Self::TakeProfit),
+            "TAKE_PROFIT_MARKET" => Ok(Self::TakeProfitMarket),
+            "TRAILING_STOP_MARKET" => Ok(Self::TrailingStopMarket),
+            other => Err(format!("Invalid OrderType: '{}'", other))
+        }
     }
 }
 
