@@ -476,3 +476,65 @@ pub struct OrderTradeEvent {
     #[serde(rename = "o")]
     pub order: OrderUpdate,
 }
+
+#[derive(Debug, Serialize, Deserialize, Clone)]
+pub struct AccountUpdateEvent {
+    #[serde(rename = "e")]
+    pub event_type: String,
+
+    #[serde(rename = "E")]
+    pub event_time: u64,
+
+    #[serde(rename = "T")]
+    pub transaction_time: u64,
+
+    #[serde(rename = "a")]
+    pub update_data: AccountUpdateData,
+}
+
+#[derive(Debug, Serialize, Deserialize, Clone)]
+pub struct AccountUpdateData {
+    #[serde(rename = "m")]
+    pub reason_type: String,
+
+    #[serde(rename = "B")]
+    pub balances: Vec<EventBalanceUpdate>,
+
+    #[serde(rename = "P")]
+    pub positions: Vec<EventPositionUpdate>,
+}
+
+
+#[derive(Debug, Serialize, Deserialize, Clone)]
+pub struct EventBalanceUpdate {
+    #[serde(rename = "a")]
+    pub asset: String,
+    #[serde(rename = "wb", with = "string_or_float")]
+    pub wallet_balance: f64,
+    #[serde(rename = "cw", with = "string_or_float")]
+    pub cross_wallet_balance: f64,
+    #[serde(rename = "bc", with = "string_or_float")]
+    pub balance_change: f64,
+}
+
+#[derive(Debug, Serialize, Deserialize, Clone)]
+pub struct EventPositionUpdate {
+    #[serde(rename = "s")]
+    pub symbol: String,
+    #[serde(rename = "pa", with = "string_or_float")]
+    pub position_amount: f64,
+    #[serde(rename = "ep", with = "string_or_float")]
+    pub entry_price: f64,
+    #[serde(rename = "cr", with = "string_or_float")]
+    pub accumulated_realized: f64,
+    #[serde(rename = "up", with = "string_or_float")]
+    pub unrealized_profit: f64,
+    #[serde(rename = "mt")]
+    pub margin_type: String,
+    #[serde(rename = "iw", with = "string_or_float")]
+    pub isolated_wallet: f64,
+    #[serde(rename = "ps")]
+    pub position_side: String,
+    #[serde(rename = "ma")]
+    pub margin_asset: String,
+}

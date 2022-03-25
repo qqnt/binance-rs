@@ -48,7 +48,7 @@ impl FuturesWebsocketAPI {
 #[allow(clippy::large_enum_variant)]
 #[derive(Debug, Serialize, Deserialize, Clone)]
 pub enum FuturesWebsocketEvent {
-    AccountUpdate(AccountUpdateEvent),
+    AccountUpdate(model::AccountUpdateEvent),
     OrderTrade(model::OrderTradeEvent),
     AggrTrades(AggrTradesEvent),
     Trade(TradeEvent),
@@ -81,7 +81,7 @@ enum FuturesEvents {
     BookTickerEvent(BookTickerEvent),
     MiniTickerEvent(MiniTickerEvent),
     VecMiniTickerEvent(Vec<MiniTickerEvent>),
-    AccountUpdateEvent(AccountUpdateEvent),
+    AccountUpdateEvent(model::AccountUpdateEvent),
     OrderTradeEvent(model::OrderTradeEvent),
     AggrTradesEvent(AggrTradesEvent),
     IndexPriceEvent(IndexPriceEvent),
