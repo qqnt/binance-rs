@@ -156,7 +156,7 @@ impl<'a> FuturesWebSockets<'a> {
             return Ok(());
         }
 
-        if let Ok(events) = serde_json::from_value::<FuturesEvents>(value) {
+        if let Ok(events) = serde_json::from_value::<FuturesEvents>(value.clone()) {
             let action = match events {
                 FuturesEvents::Vec(v) => FuturesWebsocketEvent::DayTickerAll(v),
                 FuturesEvents::DayTickerEvent(v) => FuturesWebsocketEvent::DayTicker(v),
@@ -178,6 +178,9 @@ impl<'a> FuturesWebSockets<'a> {
                 FuturesEvents::AggrTradesEvent(v) => FuturesWebsocketEvent::AggrTrades(v),
             };
             (self.handler)(action)?;
+        }
+        else {
+            log::warn!("The event {:?} cannot be handled", value);
         }
         Ok(())
     }
