@@ -429,6 +429,13 @@ impl FuturesAccount {
             .get_signed(API::Futures(Futures::PositionRisk), Some(request))
     }
 
+    pub fn get_all_positions(&self) -> Result<Vec<Position>>
+    {
+        let request = build_signed_request(BTreeMap::new(), self.recv_window)?;
+        self.client
+            .get_signed(API::Futures(Futures::PositionRisk), Some(request))
+    }
+
     pub fn account_balance(&self) -> Result<Vec<AccountBalance>> {
         let parameters = BTreeMap::new();
 
