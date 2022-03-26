@@ -14,6 +14,11 @@ error_chain! {
             description("invalid Vec for Kline"),
             display("{} at {} is missing", name, index),
         }
+
+        WebSocketDisconnected(frame: Option<tungstenite::protocol::CloseFrame<'static>>) {
+            description("WebSocket stream disconnected"),
+            display("WebSocket was closed: {:?}", frame),
+        }
      }
 
     foreign_links {
