@@ -493,6 +493,15 @@ impl FuturesAccount {
             .get_signed(API::Futures(Futures::OpenOrders), Some(request))
     }
 
+    /// Get all open orders. **Be careful** when accessing this.
+    /// Weight: 40.
+    pub fn get_all_open_orders_for_all_symbols(&self) -> Result<Vec<crate::futures::model::Order>>
+    {
+        let request = build_signed_request(BTreeMap::new(), self.recv_window)?;
+        self.client
+            .get_signed(API::Futures(Futures::OpenOrders), Some(request))
+    }
+
     pub fn get_all_orders<S1, S2, S3, S4, S5>(
         &self, symbol: S1, from_id: S2, start_time: S3, end_time: S4, limit: S5,
     ) -> Result<Vec<crate::futures::model::Order>>
