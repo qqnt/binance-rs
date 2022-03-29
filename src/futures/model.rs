@@ -538,3 +538,95 @@ pub struct EventPositionUpdate {
     #[serde(rename = "ma")]
     pub margin_asset: String,
 }
+
+
+#[derive(Debug, Deserialize, Clone)]
+/// Should be the last variant
+pub struct ListenKeyExpiredEvent {
+    #[serde(rename = "e")]
+    pub event_type: String,
+
+    #[serde(rename = "E")]
+    pub event_time: u64,
+}
+
+#[derive(Debug, Deserialize, Clone)]
+pub struct MarginCallEvent {
+    #[serde(rename = "e")]
+    pub event_type: String,
+
+    #[serde(rename = "E")]
+    pub event_time: u64,
+
+    #[serde(rename = "cw", with = "string_or_float")]
+    pub cross_wallet_balance: f64,
+
+    #[serde(rename = "p")]
+    pub positions: Vec<MarginCallPosition>,
+}
+
+#[derive(Debug, Deserialize, Clone)]
+pub struct MarginCallPosition {
+    #[serde(rename = "s")]
+    pub symbol: String,
+    #[serde(rename = "ps")]
+    pub position_side: String,
+    #[serde(rename = "pa", with = "string_or_float")]
+    pub position_amount: f64,
+    #[serde(rename = "mt")]
+    pub margin_type: String,
+    #[serde(rename = "iw", with = "string_or_float")]
+    pub isolated_wallet: f64,
+    #[serde(rename = "mp", with = "string_or_float")]
+    pub mark_price: f64,
+    #[serde(rename = "up", with = "string_or_float")]
+    pub unrealized_profit: f64,
+    #[serde(rename = "mm", with = "string_or_float")]
+    pub maintenance_margin: f64,
+}
+
+#[derive(Debug, Deserialize, Clone)]
+pub struct LeverageUpdateEvent {
+    #[serde(rename = "e")]
+    pub event_type: String,
+
+    #[serde(rename = "E")]
+    pub event_time: u64,
+
+    #[serde(rename = "T")]
+    pub transaction_time: u64,
+
+    #[serde(rename = "ac")]
+    pub update_data: LeverageUpdate,
+}
+
+#[derive(Debug, Deserialize, Clone)]
+pub struct LeverageUpdate {
+    #[serde(rename = "s")]
+    pub symbol: String,
+
+    #[serde(rename = "l")]
+    pub leverage: u16,
+}
+
+
+#[derive(Debug, Deserialize, Clone)]
+pub struct MultiAssetsMarginUpdateEvent {
+    #[serde(rename = "e")]
+    pub event_type: String,
+
+    #[serde(rename = "E")]
+    pub event_time: u64,
+
+    #[serde(rename = "T")]
+    pub transaction_time: u64,
+
+    #[serde(rename = "ai")]
+    pub update_data: MultiAssetsMarginUpdate,
+}
+
+#[derive(Debug, Deserialize, Clone)]
+pub struct MultiAssetsMarginUpdate {
+    #[serde(rename = "j")]
+    pub enabled: bool,
+}

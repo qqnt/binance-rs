@@ -3,7 +3,7 @@ use crate::config::*;
 use crate::model::*;
 use crate::futures::model;
 use url::Url;
-use serde::{Deserialize, Serialize};
+use serde::Deserialize;
 
 use std::sync::atomic::{AtomicBool, Ordering};
 use std::net::TcpStream;
@@ -46,7 +46,7 @@ impl FuturesWebsocketAPI {
 }
 
 #[allow(clippy::large_enum_variant)]
-#[derive(Debug, Serialize, Deserialize, Clone)]
+#[derive(Debug, Clone)]
 pub enum FuturesWebsocketEvent {
     AccountUpdate(model::AccountUpdateEvent),
     OrderTrade(model::OrderTradeEvent),
@@ -66,6 +66,10 @@ pub enum FuturesWebsocketEvent {
     Liquidation(LiquidationEvent),
     DepthOrderBook(DepthOrderBookEvent),
     BookTicker(BookTickerEvent),
+    MarginCall(model::MarginCallEvent),
+    LeverageUpdate(model::LeverageUpdateEvent),
+    MarginUpdate(model::MultiAssetsMarginUpdateEvent),
+    ListenKeyExpired(model::ListenKeyExpiredEvent),
 }
 
 pub struct FuturesWebSockets<'a> {
@@ -73,7 +77,7 @@ pub struct FuturesWebSockets<'a> {
     handler: Box<dyn FnMut(FuturesWebsocketEvent) -> Result<()> + 'a>,
 }
 
-#[derive(Serialize, Deserialize, Debug)]
+#[derive(Deserialize, Debug)]
 #[serde(untagged)]
 enum FuturesEvents {
     Vec(Vec<DayTickerEvent>),
@@ -94,6 +98,10 @@ enum FuturesEvents {
     LiquidationEvent(LiquidationEvent),
     OrderBook(OrderBook),
     DepthOrderBookEvent(DepthOrderBookEvent),
+    MarginCallEvent(model::MarginCallEvent),
+    LeverageUpdateEvent(model::LeverageUpdateEvent),
+    MarginUpdateEvent(model::MultiAssetsMarginUpdateEvent),
+    ListenKeyExpiredEvent(model::ListenKeyExpiredEvent),
 }
 
 impl<'a> FuturesWebSockets<'a> {
@@ -176,6 +184,10 @@ impl<'a> FuturesWebSockets<'a> {
                 FuturesEvents::OrderBook(v) => FuturesWebsocketEvent::OrderBook(v),
                 FuturesEvents::DepthOrderBookEvent(v) => FuturesWebsocketEvent::DepthOrderBook(v),
                 FuturesEvents::AggrTradesEvent(v) => FuturesWebsocketEvent::AggrTrades(v),
+                FuturesEvents::ListenKeyExpiredEvent(v) => FuturesWebsocketEvent::ListenKeyExpired(v),
+                FuturesEvents::MarginCallEvent(v) => FuturesWebsocketEvent::MarginCall(v),
+                FuturesEvents::LeverageUpdateEvent(v) => FuturesWebsocketEvent::LeverageUpdate(v),
+                FuturesEvents::MarginUpdateEvent(v) => FuturesWebsocketEvent::MarginUpdate(v),
             };
             (self.handler)(action)?;
         }
