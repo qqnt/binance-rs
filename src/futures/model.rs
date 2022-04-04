@@ -2,7 +2,7 @@ use serde::{Deserialize, Serialize};
 use crate::model::{string_or_float, string_or_float_opt, string_or_bool};
 
 pub use crate::model::{
-    Asks, Bids, BookTickers, Filters, KlineSummaries, KlineSummary, RateLimit, ServerTime,
+    PriceLevel, BookTickers, Filters, KlineSummaries, KlineSummary, RateLimit, ServerTime,
     SymbolPrice, Tickers,
 };
 
@@ -44,8 +44,8 @@ pub struct OrderBook {
     // Undocumented
     #[serde(rename = "T")]
     pub trade_order_time: u64,
-    pub bids: Vec<Bids>,
-    pub asks: Vec<Asks>,
+    pub bids: Vec<PriceLevel>,
+    pub asks: Vec<PriceLevel>,
 }
 
 #[derive(Debug, Serialize, Deserialize, Clone)]

@@ -202,7 +202,7 @@ pub struct FillInfo {
 }
 /// Response to a test order (endpoint /api/v3/order/test).
 ///
-/// Currently, the API responds {} on a successfull test transaction,
+/// Currently, the API responds {} on a successful test transaction,
 /// hence this struct has no fields.
 #[derive(Debug, Serialize, Deserialize, Clone)]
 #[serde(rename_all = "camelCase")]
@@ -212,30 +212,22 @@ pub struct TestResponse {}
 #[serde(rename_all = "camelCase")]
 pub struct OrderBook {
     pub last_update_id: u64,
-    pub bids: Vec<Bids>,
-    pub asks: Vec<Asks>,
+    pub bids: Vec<PriceLevel>,
+    pub asks: Vec<PriceLevel>,
 }
 
 #[derive(PartialEq, Debug, Serialize, Deserialize, Clone)]
-pub struct Bids {
+pub struct PriceLevel {
     #[serde(with = "string_or_float")]
     pub price: f64,
     #[serde(with = "string_or_float")]
     pub qty: f64,
 }
 
-impl Bids {
-    pub fn new(price: f64, qty: f64) -> Bids {
-        Bids { price, qty }
+impl PriceLevel {
+    pub fn new(price: f64, qty: f64) -> PriceLevel {
+        PriceLevel { price, qty }
     }
-}
-
-#[derive(Debug, Serialize, Deserialize, Clone)]
-pub struct Asks {
-    #[serde(with = "string_or_float")]
-    pub price: f64,
-    #[serde(with = "string_or_float")]
-    pub qty: f64,
 }
 
 #[derive(Debug, Serialize, Deserialize, Clone)]
@@ -1113,10 +1105,10 @@ pub struct DepthOrderBookEvent {
     pub previous_final_update_id: Option<u64>,
 
     #[serde(rename = "b")]
-    pub bids: Vec<Bids>,
+    pub bids: Vec<PriceLevel>,
 
     #[serde(rename = "a")]
-    pub asks: Vec<Asks>,
+    pub asks: Vec<PriceLevel>,
 }
 
 /// Response to the Savings API get all coins request

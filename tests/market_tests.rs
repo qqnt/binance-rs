@@ -24,7 +24,7 @@ mod tests {
         mock_get_depth.assert();
 
         assert_eq!(order_book.last_update_id, 1027024);
-        assert_eq!(order_book.bids[0], Bids::new(4.00000000, 431.00000000));
+        assert_eq!(order_book.bids[0], PriceLevel::new(4.00000000, 431.00000000));
     }
 
     #[test]
@@ -42,7 +42,7 @@ mod tests {
         mock_get_custom_depth.assert();
 
         assert_eq!(order_book.last_update_id, 1027024);
-        assert_eq!(order_book.bids[0], Bids::new(4.00000000, 431.00000000));
+        assert_eq!(order_book.bids[0], PriceLevel::new(4.00000000, 431.00000000));
     }
 
     #[test]
