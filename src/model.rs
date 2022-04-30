@@ -940,20 +940,20 @@ pub struct Kline {
     #[serde(rename = "L")]
     pub last_trade_id: i64,
 
-    #[serde(rename = "o")]
-    pub open: String,
+    #[serde(rename = "o", with = "string_or_float")]
+    pub open: f64,
 
-    #[serde(rename = "c")]
-    pub close: String,
+    #[serde(rename = "c", with = "string_or_float")]
+    pub close: f64,
 
-    #[serde(rename = "h")]
-    pub high: String,
+    #[serde(rename = "h", with = "string_or_float")]
+    pub high: f64,
 
-    #[serde(rename = "l")]
-    pub low: String,
+    #[serde(rename = "l", with = "string_or_float")]
+    pub low: f64,
 
-    #[serde(rename = "v")]
-    pub volume: String,
+    #[serde(rename = "v", with = "string_or_float")]
+    pub volume: f64,
 
     #[serde(rename = "n")]
     pub number_of_trades: i64,
@@ -961,14 +961,14 @@ pub struct Kline {
     #[serde(rename = "x")]
     pub is_final_bar: bool,
 
-    #[serde(rename = "q")]
-    pub quote_asset_volume: String,
+    #[serde(rename = "q", with = "string_or_float")]
+    pub quote_asset_volume: f64,
 
-    #[serde(rename = "V")]
-    pub taker_buy_base_asset_volume: String,
+    #[serde(rename = "V", with = "string_or_float")]
+    pub taker_buy_base_asset_volume: f64,
 
-    #[serde(rename = "Q")]
-    pub taker_buy_quote_asset_volume: String,
+    #[serde(rename = "Q", with = "string_or_float")]
+    pub taker_buy_quote_asset_volume: f64,
 
     #[serde(skip, rename = "B")]
     pub ignore_me: String,
