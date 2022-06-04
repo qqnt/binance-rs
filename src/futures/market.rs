@@ -68,12 +68,18 @@ impl FuturesMarket {
         self.client.get(API::Futures(Futures::Depth), Some(request)).await
     }
 
-    pub async fn get_trades<S>(&self, symbol: S) -> Result<Trades>
-    where
-        S: Into<String>,
+    pub async fn get_trades<S1, S2>(&self ,symbol: S1, limit: S2,
+    ) -> Result<Trades>
+        where
+            S1: Into<String>,
+            S2: Into<Option<u16>>
     {
         let mut parameters: BTreeMap<String, String> = BTreeMap::new();
         parameters.insert("symbol".into(), symbol.into());
+        if let Some(lt) = limit.into() {
+            parameters.insert("limit".into(),  lt.to_string());
+        }
+
         let request = build_request(parameters);
         self.client
             .get(API::Futures(Futures::Trades), Some(request)).await
