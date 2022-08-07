@@ -19,6 +19,7 @@ enum FuturesWebsocketAPI {
     Custom(String),
 }
 
+#[derive(Debug, Copy, Clone)]
 pub enum FuturesMarket {
     USDM,
     COINM,
